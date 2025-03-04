@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+    <title>Loan Prediction Model</title>
+    <style>
+        body {
+            background-color: #E6E6FA;
+            font-family: Arial, sans-serif;
+        }
+        form {
+            margin: auto;
+            width: 35%;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ccc;
+        }
+        fieldset {
+            border: none;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="submit"] {
+            margin-top: 20px;
+        }
+        .result {
+            margin: auto;
+            width: 35%;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ccc;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <form action="{{ url_for('main') }}" method="POST">
+        <fieldset>
+            <legend>Input Values</legend>
+            
+            <label for="Married">Married:</label>
+            <input list="mrd" type="text" name="Married" id="Married" required>
+            <datalist id="mrd">
+                <option value="Yes">
+                <option value="No">
+            </datalist>
+            
+            <label for="Education">Education:</label>
+            <input list="edu" type="text" name="Education" id="Education" required>
+            <datalist id="edu">
+                <option value="Graduate">
+                <option value="Not Graduate">
+                <option value="HSC">
+            </datalist>
+            
+            <label for="ApplicantIncome">Applicant Income:</label>
+            <input type="number" name="ApplicantIncome" id="ApplicantIncome" required>
+            
+            <label for="LoanAmount">Loan Amount:</label>
+            <input type="number" name="LoanAmount" id="LoanAmount" required step="any"
+                   oninvalid="setCustomValidity('Please enter a valid loan amount')"
+                   onchange="try{setCustomValidity('')}catch(e){}">
+            
+            <label for="Credit_History">Credit History:</label>
+            <input type="number" name="Credit_History" id="Credit_History" required step="any"
+                   oninvalid="setCustomValidity('Please enter a valid credit history value')"
+                   onchange="try{setCustomValidity('')}catch(e){}">
+            
+            <input type="submit" value="Submit">
+        </fieldset>
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <h2>Prediction</h2>
+        {% if original_input %}
+            <h3>Input Data:</h3>
+            <ul>
+                {% for key, value in original_input.items() %}
+                    <li><strong>{{ key }}:</strong> {{ value }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <h3>Loan Rejection Probability:</h3>
+        <p style="font-size: 50px;">{{ result }}</p>
+    </div>
+    {% endif %}
+</body>
+</html>

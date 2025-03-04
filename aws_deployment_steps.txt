@@ -1,0 +1,85 @@
+# Deploying Flask ML Model on AWS EC2 using Docker
+
+## Step 1: crating the full pipeline and containerizing in an potimized wasy through docker.
+```
+## Step 2: Install AWS CLI for windows:
+https://awscli.amazonaws.com/AWSCLIV2.msi.
+Cofigure your command prompt --- >>AWS configure
+give the credentails
+
+## Step 3: Launch an EC2 Instance
+1. Login to AWS and go to the **EC2 Dashboard**.
+2. Click **Launch Instance**.
+3. Choose **Ubuntu 22.04 LTS (Free Tier eligible)**.
+4. Choose **t2.micro** (1 vCPU, 1GB RAM, Free Tier).
+5. Configure **storage** (default 8GB is fine; increase if needed).
+6. Configure **Security Group**: Go to security groups
+   - **Edit inbound rules** for:
+     - **Port 22** (SSH)
+     - **Port 5000** (Flask App)
+     - **Port 80** (Optional, if using Nginx)
+     - Create new rule CUSTOM TCP and set the port 5000 for flask app
+7. **Launch the instance** and **Download the key pair** (`.pem` file).
+
+## Step 4: Connect to the EC2 Instance
+1. Open **Terminal** (or Git Bash in Windows) and run:
+   ```sh
+   ssh -i your-key.pem ubuntu@your-ec2-public-ip
+   ssh -i my-key.pem ubuntu@3.82.213.127
+
+   ```
+## Step 5: Install Dependencies on EC2
+Run the following commands:
+```sh
+sudo apt update && sudo apt install -y docker.io
+```
+Ensure Docker is running:
+```sh
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+## Step 6: Transfer Your Application to EC2
+On your **local machine**, in the project directory, build and save the Docker image:
+```sh
+docker build -t my-ml-app .
+docker save -o ml-app.tar my-ml-app
+```
+Then, transfer it to EC2:
+```sh
+scp -i your-key.pem ml-app.tar ubuntu@your-ec2-public-ip:~
+scp -i my-key.pem loan-app1.tar ubuntu@3.82.213.127:~
+```
+On EC2, load the image:
+```sh
+sudo docker load -i loan-app1.tar
+```
+
+## Step 7: Run the Flask App in Docker
+Run the container:
+```sh
+sudo docker run -d -p 5000:5000 loan-app1
+```
+Check if it's running:
+```sh
+sudo docker ps
+```
+Run the docker:
+sudo docker run -d -p 5000:5000 loan-app1
+
+Now, access your app at:
+```
+http://your-ec2-public-ip:5000
+http://3.82.213.127:5000
+```
+
+
+#Stop Container
+sudo docker stop <container_id>   [ note docker ps will give container id]
+
+# to remove container
+docker rm <container_id>
+
+# Go to EC2 AWS page and stop it [ Preferebly terminate]
+
+
