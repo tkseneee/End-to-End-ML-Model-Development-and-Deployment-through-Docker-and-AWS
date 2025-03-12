@@ -79,13 +79,6 @@ Deployment on AWS EC2
 Now, visit http://your-ec2-public-ip:5000/ in your browser.
 
 --------------------------------------------------------------------------------
-Screenshots
---------------------------------------------------------------------------------
-- Web Frontend: A user-friendly interface for entering loan details.
-- Flask API: Backend processes user inputs and returns predictions.
-- AWS EC2 Deployment: Hosted securely on the cloud.
-
-(Insert screenshots here if available)
 
 --------------------------------------------------------------------------------
 Future Enhancements
